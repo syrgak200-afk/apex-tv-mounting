@@ -7,7 +7,8 @@ const companyName = "Apex TV Mounting & Installation";
 const companyPhone = "(714) 766-1943";
 const companyPhoneHref = "+17147661943";
 const maximumImages = 5;
-const maximumImageBytes = 5 * 1024 * 1024;
+const maximumImageBytes = 1024 * 1024;
+const maximumTotalImageBytes = 4 * 1024 * 1024;
 const duplicateWindowMs = 60_000;
 const acceptedImageTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
 const recentSubmissions = new Map<string, number>();
@@ -73,9 +74,12 @@ export async function POST(request: Request) {
 
     const images = formData.getAll("photos").filter((entry): entry is File => entry instanceof File && entry.size > 0);
     if (images.length > maximumImages) return Response.json({ error: `Please upload no more than ${maximumImages} images.` }, { status: 400 });
+    if (images.reduce((total, image) => total + image.size, 0) > maximumTotalImageBytes) {
+      return Response.json({ error: "Project photos must total 4 MB or less." }, { status: 400 });
+    }
     for (const image of images) {
       if (!acceptedImageTypes.has(image.type) || image.size > maximumImageBytes) {
-        return Response.json({ error: "Photos must be JPG, PNG, or WebP files under 5 MB each." }, { status: 400 });
+        return Response.json({ error: "Photos must be JPG, PNG, or WebP files under 1 MB each." }, { status: 400 });
       }
     }
 

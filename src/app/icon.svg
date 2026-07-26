@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Apex TV Mounting">
+  <rect width="64" height="64" rx="12" fill="#173c35"/>
+  <path d="M13 17h38v25H13z" fill="none" stroke="#d7f35a" stroke-width="4"/>
+  <path d="M24 52h16M32 42v10" stroke="#d7f35a" stroke-width="4" stroke-linecap="round"/>
+  <path d="m25 35 7-13 7 13" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
