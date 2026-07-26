@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { ProjectGallery } from "@/components/ProjectGallery";
 
 const phoneDisplay = "(714) 766-1943";
 const phoneHref = "tel:+17147661943";
@@ -72,7 +73,7 @@ export default function Home() {
 
     <section className="section warm-section" id="process"><div className="container"><div className="center-heading"><p className="eyebrow eyebrow-dark">SIMPLE BY DESIGN</p><h2>Your setup in <em>three clear steps.</em></h2></div><div className="process-grid">{[["01", "Share your project", "Tell us your TV size, wall type, location, and what you want the finished space to feel like."], ["02", "Get a clear plan", "We will follow up with the questions needed to define the right installation approach."], ["03", "Enjoy the finished space", "Your installation is completed with an eye on the details that make the room feel pulled together."]].map(([number, title, text]) => <article className="process-step" key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>)}</div></div></section>
 
-    <section className="section container gallery-section" id="gallery"><div className="section-heading"><div><p className="eyebrow eyebrow-dark">PROJECT GALLERY</p><h2>A place for your <em>best work.</em></h2></div><p>Replace these visual placeholders with your own completed installation photography before launch.</p></div><div className="gallery"><div className="gallery-card gallery-one"><span>Living Room Placeholder</span></div><div className="gallery-card gallery-two"><span>Media Wall Placeholder</span></div><div className="gallery-card gallery-three"><span>Bedroom Setup Placeholder</span></div></div></section>
+    <ProjectGallery />
 
     <section className="review-section" id="reviews"><div className="container review-layout"><div><p className="eyebrow eyebrow-dark">CUSTOMER FEEDBACK</p><h2>Let real work and real feedback do the <em>talking.</em></h2><div className="rating"><strong>REVIEWS</strong><span>COMING SOON<small>Verified customer reviews will be shared here after approval.</small></span></div></div><p className="review-note">Apex TV Mounting will publish customer feedback only after it has been verified and approved.</p></div></section>
 
