@@ -19,3 +19,62 @@
 
 /* Screenshot-backed customer reviews */
 .review-section{background:#e0efab;padding:78px 0}.review-intro{display:grid;gap:20px;margin-bottom:34px}.review-intro h2{font-size:clamp(2.55rem,7vw,5rem);letter-spacing:-.06em;line-height:.96;margin:0;max-width:620px}.review-intro>p{max-width:390px;margin:0;color:#40554c;font-size:.88rem;line-height:1.55}.review-quotes{display:grid;gap:12px;margin-bottom:36px}.review-quotes figure{display:grid;gap:14px;margin:0;padding:21px 18px;border:1px solid rgba(19,34,31,.2);background:rgba(255,255,255,.28)}.review-quotes blockquote{font-family:Georgia,serif;font-size:1.06rem;line-height:1.35}.review-quotes figcaption{font-size:.66rem;font-weight:bold;letter-spacing:.04em;text-transform:uppercase}.review-proof{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.review-screenshot{display:block;overflow:hidden;border:1px solid rgba(19,34,31,.18);background:#fff;padding:0;cursor:zoom-in}.review-screenshot img{display:block;width:100%;height:auto;transition:transform .25s ease}.review-screenshot:hover img{transform:scale(1.02)}.review-lightbox-content{max-width:min(760px,92vw)}@media (min-width:720px){.review-intro{grid-template-columns:1fr .55fr;align-items:end}.review-quotes{grid-template-columns:repeat(2,1fr);gap:15px}.review-proof{grid-template-columns:repeat(3,1fr);gap:16px}}@media (min-width:1050px){.review-quotes{grid-template-columns:repeat(3,1fr)}.review-proof{grid-template-columns:repeat(5,1fr)}}
+
+/* Quiet Precision — deliberately placed last so it governs the existing, working markup. */
+:root{--font-body:var(--font-sans),Arial,sans-serif;--font-display:var(--font-serif),Georgia,serif;--muted:#526059}
+body{font-family:var(--font-body)}
+.hero h1 em,h2 em,blockquote{font-family:var(--font-display),Georgia,serif}
+.eyebrow-dark{color:#4b6142}
+.hero{min-height:760px;background:#102a24}
+.hero-orbit{display:none}
+.hero-content{max-width:720px;padding:156px 0 130px}
+.hero h1{max-width:720px;font-size:clamp(3.5rem,7.5vw,6.7rem)}
+.hero-copy{max-width:460px;font-size:1.08rem}
+.hero-proof{margin-top:68px}
+.trust-bar{padding:19px 0;background:#f4f1ea;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.trust-grid p{color:#14251f;font-size:.68rem}
+.section{padding:112px 0}
+.section-heading{margin-bottom:58px}
+.service-grid{display:block;border:0}
+.service-card{display:grid;grid-template-columns:56px 1fr;min-height:0;padding:28px 0;border:0;border-top:1px solid var(--line)}
+.service-card:last-child{border-bottom:1px solid var(--line)}
+.service-card h3,.service-card p,.service-card a{grid-column:2}
+.service-card h3{margin:0 0 8px;font-size:1.35rem}
+.service-card p{max-width:420px;margin:0 0 14px}
+.service-icon{grid-row:1 / 4;width:auto;height:auto;border:0;border-radius:0}
+.dark-section,.quote-section{padding:128px 0;background:#102a24}
+.split-feature{gap:62px}
+.feature-image{border-radius:0;background-image:linear-gradient(145deg,rgba(15,32,28,.12),rgba(15,32,28,.48)),url('/portfolio/tv-mounting-09.webp')}
+.image-note{padding:14px 16px}
+.warm-section{background:#ebe5d7}
+.gallery-section{padding-top:128px}
+.gallery-filters{gap:18px;margin:-8px 0 34px}
+.gallery-filters button{padding:7px 0;border:0;border-bottom:1px solid transparent;background:transparent;color:var(--muted)}
+.gallery-filters button:hover,.gallery-filters .is-active{border-color:var(--pine);background:transparent;color:var(--pine)}
+.project-card{margin-bottom:22px;background:#d9d5ca}
+.project-card-overlay{padding:44px 16px 14px}
+.project-card-overlay strong{font-size:.78rem;font-weight:600}
+.review-section{padding:112px 0;background:#102a24;color:#fff}
+.review-section .eyebrow-dark{color:var(--lime)}
+.review-intro>p{color:#d5dfd7}
+.review-quotes{gap:28px;margin-bottom:52px}
+.review-quotes figure{padding:0;border:0;background:transparent}
+.review-quotes blockquote{font-size:clamp(1.25rem,2vw,1.65rem);line-height:1.3}
+.review-quotes figcaption{color:var(--lime)}
+.review-proof{gap:10px}
+.review-screenshot{border:0;opacity:.72}
+.review-screenshot:hover{opacity:1}
+.quote-quiz,.quote-form{border-radius:0}
+.quote-quiz{padding:38px;background:#f5f2ea}
+.quiz-progress{margin-bottom:34px}
+.quiz-options{gap:0;border-top:1px solid var(--line)}
+.quiz-options button{padding:17px 0;border:0;border-bottom:1px solid var(--line);background:transparent}
+.quiz-options button.selected{padding-left:14px;border:0;border-bottom:1px solid var(--line);background:#e7f0d0}
+.estimate-box{padding:22px;background:#e7f0d0}
+.faq-section{padding-top:96px}
+.footer{padding-top:72px}
+.mobile-action-bar{background:#102a24}
+.mobile-action-bar a:last-child{background:#c7dc65}
+.mobile-action-bar a{font-size:.78rem}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #c7dc65;outline-offset:3px}
+@media (max-width:719px){.hero{min-height:0}.hero-content{padding:118px 0 96px}.hero h1{font-size:clamp(3.25rem,14vw,4.6rem)}.hero-actions{gap:18px}.section{padding:72px 0}.dark-section,.quote-section,.review-section{padding:80px 0}.quote-quiz{padding:25px}.mobile-action-bar{box-shadow:0 -6px 22px rgba(0,0,0,.14)}}

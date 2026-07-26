@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Fraunces, Manrope } from "next/font/google";
 import { Suspense } from "react";
 import { GoogleAnalyticsPageView } from "@/components/GoogleAnalytics";
 import { MicrosoftClarity } from "@/components/MicrosoftClarity";
 import { GA_MEASUREMENT_ID, GA_READY_EVENT } from "@/lib/analytics";
 import "./globals.css";
+
+const manrope = Manrope({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
+const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-serif", display: "swap" });
 
 const GTM_CONTAINER_ID = "GTM-P7ZMZXSM";
 
@@ -39,7 +43,7 @@ export const viewport = { themeColor: "#1f1713", colorScheme: "light" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${manrope.variable} ${fraunces.variable}`}>
       <head>
         <Script id="google-tag-manager" strategy="beforeInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${GTM_CONTAINER_ID}');`}
