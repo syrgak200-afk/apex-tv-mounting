@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { ProjectGallery } from "@/components/ProjectGallery";
+import { ReviewsSection } from "@/components/ReviewsSection";
 
 const phoneDisplay = "(714) 766-1943";
 const phoneHref = "tel:+17147661943";
@@ -75,7 +76,7 @@ export default function Home() {
 
     <ProjectGallery />
 
-    <section className="review-section" id="reviews"><div className="container review-layout"><div><p className="eyebrow eyebrow-dark">CUSTOMER FEEDBACK</p><h2>Let real work and real feedback do the <em>talking.</em></h2><div className="rating"><strong>REVIEWS</strong><span>COMING SOON<small>Verified customer reviews will be shared here after approval.</small></span></div></div><p className="review-note">Apex TV Mounting will publish customer feedback only after it has been verified and approved.</p></div></section>
+    <ReviewsSection />
 
     <section className="section container faq-section"><div className="section-heading"><div><p className="eyebrow eyebrow-dark">GOOD TO KNOW</p><h2>Questions, <em>answered.</em></h2></div></div><div className="faq-list">{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section>
 
