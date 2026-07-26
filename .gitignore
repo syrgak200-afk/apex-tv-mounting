@@ -1,0 +1,9 @@
+node_modules/
+.next/
+out/
+.pnpm-home/
+.pnpm-store/
+.temp/
+dev-server*.log
+*.tsbuildinfo
+next-env.d.ts
