@@ -24,28 +24,23 @@ function Arrow() { return <span aria-hidden="true">&rarr;</span>; }
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [formError, setFormError] = useState("");
   const localBusinessSchema = { "@context": "https://schema.org", "@type": "HomeAndConstructionBusiness", name: "Apex TV Mounting & Installation", telephone: "+1-714-766-1943", email, areaServed: ["Los Angeles", "Orange County"], serviceType: ["TV Mounting", "Wire Concealment", "Home Theater Installation"] };
   const closeMenu = () => setMenuOpen(false);
-  const submitQuote = (event: FormEvent<HTMLFormElement>) => {
+  const submitQuote = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const body = [
-      "New Apex TV Mounting quote request",
-      "",
-      `Name: ${formData.get("name")}`,
-      `Phone: ${formData.get("phone")}`,
-      `Email: ${formData.get("email")}`,
-      `ZIP code: ${formData.get("zip")}`,
-      `TV size: ${formData.get("tvSize")}`,
-      `Wall type: ${formData.get("wallType")}`,
-      `Mount available: ${formData.get("mountAvailable")}`,
-      `Wire concealment: ${formData.get("wireConcealment")}`,
-      `Preferred date: ${formData.get("preferredDate") || "Not specified"}`,
-      `Project notes: ${formData.get("notes") || "Not provided"}`,
-    ].join("\n");
-    window.location.href = `mailto:${email}?subject=${encodeURIComponent("Quote request - Apex TV Mounting")}&body=${encodeURIComponent(body)}`;
-    setSubmitted(true);
+    setFormStatus("loading");
+    setFormError("");
+    try {
+      const response = await fetch("/api/quote", { method: "POST", body: new FormData(event.currentTarget) });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "We could not send your request.");
+      setFormStatus("success");
+    } catch (error) {
+      setFormStatus("error");
+      setFormError(error instanceof Error ? error.message : "We could not send your request.");
+    }
   };
 
   return <main>
@@ -74,7 +69,7 @@ export default function Home() {
 
     <section className="section container faq-section"><div className="section-heading"><div><p className="eyebrow eyebrow-dark">GOOD TO KNOW</p><h2>Questions, <em>answered.</em></h2></div></div><div className="faq-list">{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section>
 
-    <section className="quote-section" id="quote"><div className="container quote-layout"><div className="quote-intro"><p className="eyebrow">REQUEST A QUOTE</p><h2>Tell us about your <em>space.</em></h2><p>Share a few details and we will follow up about your installation. Most requests take less than two minutes to complete.</p><div className="quote-contact"><a href={phoneHref}>Call {phoneDisplay}</a><a href={`mailto:${email}`}>{email}</a></div></div><form className="quote-form" onSubmit={submitQuote}>{submitted ? <div className="form-success" role="status"><strong>Your email app is ready with your project details.</strong><p>Send that message to complete your request, or call {phoneDisplay} for immediate assistance.</p></div> : <><div className="form-grid"><label>Full name<input name="name" required autoComplete="name" /></label><label>Phone<input name="phone" type="tel" required autoComplete="tel" /></label><label>Email<input name="email" type="email" required autoComplete="email" /></label><label>ZIP code<input name="zip" inputMode="numeric" required autoComplete="postal-code" /></label><label>TV size<select name="tvSize" required defaultValue=""><option value="" disabled>Select size</option><option>Under 55 inches</option><option>55 to 64 inches</option><option>65 to 74 inches</option><option>75 inches or larger</option><option>Not sure</option></select></label><label>Wall type<select name="wallType" required defaultValue=""><option value="" disabled>Select wall type</option><option>Drywall</option><option>Brick</option><option>Concrete</option><option>Fireplace</option><option>Not sure</option></select></label><label>Mount available?<select name="mountAvailable" required defaultValue=""><option value="" disabled>Select one</option><option>Yes</option><option>No</option><option>Not sure</option></select></label><label>Wire concealment?<select name="wireConcealment" required defaultValue=""><option value="" disabled>Select one</option><option>Yes</option><option>No</option><option>Not sure</option></select></label><label>Preferred date<input name="preferredDate" type="date" /></label><label>Photo upload <span className="field-note">Coming soon</span><input name="photo" type="file" disabled aria-label="Photo upload coming soon" /></label><label className="form-notes">Project notes<textarea name="notes" rows={4} placeholder="Tell us about the room, TV, wall, or anything else that helps." /></label></div><button className="button button-primary form-submit" type="submit">Open quote email <Arrow /></button><p className="form-disclaimer">This opens a prefilled email in your email app. It does not create an appointment.</p></>}</form></div></section>
+    <section className="quote-section" id="quote"><div className="container quote-layout"><div className="quote-intro"><p className="eyebrow">REQUEST A QUOTE</p><h2>Tell us about your <em>space.</em></h2><p>Share a few details and we will follow up about your installation. Most requests take less than two minutes to complete.</p><div className="quote-contact"><a href={phoneHref}>Call {phoneDisplay}</a><a href={`mailto:${email}`}>{email}</a></div></div><form className="quote-form" onSubmit={submitQuote}>{formStatus === "success" ? <div className="form-success" role="status"><strong>Your quote request is on its way.</strong><p>Thank you. Apex TV Mounting will follow up about your project details.</p></div> : <><div className="form-grid"><label>Full name<input name="name" required autoComplete="name" disabled={formStatus === "loading"} /></label><label>Phone<input name="phone" type="tel" required autoComplete="tel" disabled={formStatus === "loading"} /></label><label>Email<input name="email" type="email" required autoComplete="email" disabled={formStatus === "loading"} /></label><label>ZIP code<input name="zip" inputMode="numeric" required autoComplete="postal-code" disabled={formStatus === "loading"} /></label><label>TV size<select name="tvSize" required defaultValue="" disabled={formStatus === "loading"}><option value="" disabled>Select size</option><option>Under 55 inches</option><option>55 to 64 inches</option><option>65 to 74 inches</option><option>75 inches or larger</option><option>Not sure</option></select></label><label>Wall type<select name="wallType" required defaultValue="" disabled={formStatus === "loading"}><option value="" disabled>Select wall type</option><option>Drywall</option><option>Brick</option><option>Concrete</option><option>Fireplace</option><option>Not sure</option></select></label><label>Mount available?<select name="mountAvailable" required defaultValue="" disabled={formStatus === "loading"}><option value="" disabled>Select one</option><option>Yes</option><option>No</option><option>Not sure</option></select></label><label>Wire concealment?<select name="wireConcealment" required defaultValue="" disabled={formStatus === "loading"}><option value="" disabled>Select one</option><option>Yes</option><option>No</option><option>Not sure</option></select></label><label>Preferred date<input name="preferredDate" type="date" disabled={formStatus === "loading"} /></label><label>Project photos <span className="field-note">Up to 5 JPG, PNG, or WebP files</span><input name="photos" type="file" multiple accept="image/jpeg,image/png,image/webp" disabled={formStatus === "loading"} aria-label="Upload project photos" /></label><label className="form-notes">Project notes<textarea name="notes" rows={4} placeholder="Tell us about the room, TV, wall, or anything else that helps." disabled={formStatus === "loading"} /></label></div>{formStatus === "error" && <p className="form-error" role="alert">{formError}</p>}<button className="button button-primary form-submit" type="submit" disabled={formStatus === "loading"}>{formStatus === "loading" ? "Sending request..." : "Request my quote"} <Arrow /></button><p className="form-disclaimer">Submitting this form does not create an appointment. We will follow up to discuss your project.</p></>}</form></div></section>
     <footer className="footer"><div className="container footer-top"><a className="brand footer-brand" href="#top"><span>APEX</span><small>TV MOUNTING</small></a><p>TV mounting &amp; installation<br />in Los Angeles &amp; Orange County.</p><div><a href="#services">Services</a><a href="#process">Process</a><a href="#gallery">Gallery</a><a href="#quote">Get a quote</a></div></div><div className="container footer-bottom"><span>&copy; 2026 Apex TV Mounting &amp; Installation</span><span><a href={phoneHref}>{phoneDisplay}</a> · <a href={`mailto:${email}`}>{email}</a></span></div></footer>
     <div className="mobile-action-bar"><a href={phoneHref}>Call now</a><a href="#quote">Get quote</a></div>
   </main>;
