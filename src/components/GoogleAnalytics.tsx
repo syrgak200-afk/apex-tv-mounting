@@ -1,11 +1,10 @@
 "use client";
 
-import Script from "next/script";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 
-const measurementId = "G-KRW9EM9BT0";
-const readyEvent = "apex:ga4-ready";
+export const GA_MEASUREMENT_ID = "G-KRW9EM9BT0";
+export const GA_READY_EVENT = "apex:ga4-ready";
 
 declare global {
   interface Window {
@@ -45,34 +44,9 @@ export function GoogleAnalyticsPageView() {
       return;
     }
 
-    window.addEventListener(readyEvent, track, { once: true });
-    return () => window.removeEventListener(readyEvent, track);
+    window.addEventListener(GA_READY_EVENT, track, { once: true });
+    return () => window.removeEventListener(GA_READY_EVENT, track);
   }, [pathname, searchParams]);
 
   return null;
-}
-
-export default function GoogleAnalytics() {
-  return (
-    <>
-      <Script
-        id="google-analytics"
-        src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
-        strategy="afterInteractive"
-      />
-      <Script
-        id="google-analytics-init"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            window.gtag = function gtag(){window.dataLayer.push(arguments);}
-            window.gtag('js', new Date());
-            window.gtag('config', '${measurementId}', { send_page_view: false });
-            window.dispatchEvent(new Event('${readyEvent}'));
-          `,
-        }}
-      />
-    </>
-  );
 }

@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Suspense } from "react";
-import GoogleAnalytics, { GoogleAnalyticsPageView } from "@/components/GoogleAnalytics";
+import {
+  GA_MEASUREMENT_ID,
+  GA_READY_EVENT,
+  GoogleAnalyticsPageView,
+} from "@/components/GoogleAnalytics";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -32,7 +37,20 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
       <body>
         {children}
-        <GoogleAnalytics />
+        <Script
+          id="google-analytics"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function gtag(){window.dataLayer.push(arguments);}
+            window.gtag('js', new Date());
+            window.gtag('config', '${GA_MEASUREMENT_ID}', { send_page_view: false });
+            window.dispatchEvent(new Event('${GA_READY_EVENT}'));
+          `}
+        </Script>
         <Suspense fallback={null}>
           <GoogleAnalyticsPageView />
         </Suspense>
