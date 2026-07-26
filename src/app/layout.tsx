@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   description: "Premium TV mounting, wire concealment, and home theater installation in Los Angeles and Orange County.",
   keywords: ["TV mounting Los Angeles", "TV installation Orange County", "wire concealment", "home theater installation"],
   alternates: { canonical: "/" },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
   openGraph: {
     title: "Apex TV Mounting & Installation | Precision You Can See.",
     description: "Premium TV mounting, wire concealment, and home theater installation in Los Angeles and Orange County.",
@@ -19,21 +20,26 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "/",
     siteName: "Apex TV Mounting & Installation",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Apex TV Mounting & Installation" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Apex TV Mounting & Installation | Precision You Can See.",
     description: "Premium TV mounting, wire concealment, and home theater installation in Los Angeles and Orange County.",
+    images: ["/opengraph-image"],
   },
   verification: {
     google: "gcFnoDOx5aXBMjgZTwE8TpVS1tjoSfX5zBjlFzkfAVA",
   },
 };
 
+export const viewport = { themeColor: "#1f1713", colorScheme: "light" };
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body>
+        <a className="skip-link" href="#main-content">Skip to main content</a>
         {children}
         <MicrosoftClarity />
         <Script

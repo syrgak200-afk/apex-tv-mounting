@@ -26,7 +26,7 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [formError, setFormError] = useState("");
-  const localBusinessSchema = { "@context": "https://schema.org", "@type": "LocalBusiness", name: "Apex TV Mounting & Installation", url: "https://www.apex-tv-mounting.com", telephone: "+1-714-766-1943", email, areaServed: ["Los Angeles", "Orange County"], serviceType: ["TV Mounting", "Wire Concealment", "Home Theater Installation"] };
+  const structuredData = { "@context": "https://schema.org", "@graph": [{ "@type": "Organization", "@id": "https://www.apex-tv-mounting.com/#organization", name: "Apex TV Mounting & Installation", url: "https://www.apex-tv-mounting.com", email, telephone: "+1-714-766-1943" }, { "@type": "LocalBusiness", "@id": "https://www.apex-tv-mounting.com/#localbusiness", name: "Apex TV Mounting & Installation", url: "https://www.apex-tv-mounting.com", telephone: "+1-714-766-1943", email, parentOrganization: { "@id": "https://www.apex-tv-mounting.com/#organization" }, areaServed: [{ "@type": "City", name: "Los Angeles" }, { "@type": "AdministrativeArea", name: "Orange County" }], serviceType: ["TV Mounting", "Wire Concealment", "Home Theater Installation"] }, { "@type": "Service", name: "TV Mounting and Installation", serviceType: "TV mounting", provider: { "@id": "https://www.apex-tv-mounting.com/#localbusiness" }, areaServed: ["Los Angeles", "Orange County"], url: "https://www.apex-tv-mounting.com" }, { "@type": "FAQPage", mainEntity: faqs.map(([question, answer]) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })) }] };
   const closeMenu = () => setMenuOpen(false);
   const submitQuote = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -52,8 +52,8 @@ export default function Home() {
     }
   };
 
-  return <main>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }} />
+  return <main id="main-content">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
     <section className="hero" id="top">
       <nav className="nav container" aria-label="Main navigation">
         <a className="brand" href="#top" onClick={closeMenu} aria-label="Apex TV Mounting home"><span>APEX</span><small>TV MOUNTING</small></a>
