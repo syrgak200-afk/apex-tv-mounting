@@ -1,0 +1,110 @@
+.root {
+  min-width: 0;
+}
+
+.viewport {
+  contain: paint;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.track {
+  display: flex;
+  gap: 1rem;
+  min-width: 100%;
+  width: 100%;
+}
+
+.slide {
+  flex: 0 0 var(--carousel-slide-size, 100%);
+  min-width: 0;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.footer {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.controls,
+.dots {
+  align-items: center;
+  display: flex;
+}
+
+.controls {
+  gap: 0.5rem;
+}
+
+.controls button,
+.dot {
+  align-items: center;
+  background: transparent;
+  border: 1px solid rgba(18, 53, 45, 0.2);
+  color: #12352d;
+  cursor: pointer;
+  display: inline-flex;
+  height: 44px;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0;
+  width: 44px;
+}
+
+.controls button {
+  border-radius: 50%;
+  font-size: 1.15rem;
+}
+
+.controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.dots {
+  gap: 0.25rem;
+}
+
+.dot {
+  border: 0;
+  border-radius: 50%;
+}
+
+.dot span {
+  background: #b8bcb6;
+  border-radius: 50%;
+  display: block;
+  height: 7px;
+  width: 7px;
+}
+
+.dot[aria-current="true"] span {
+  background: #12352d;
+}
+
+.controls button:focus-visible,
+.dot:focus-visible,
+.viewport:focus-visible {
+  outline: 3px solid #c7dc65;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viewport {
+    scroll-behavior: auto;
+  }
+}

@@ -1,37 +1,97 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { InlineCarousel } from "@/components/InlineCarousel";
 
-const reviewScreenshots = [
-  { image: "/reviews/facebook-marketplace-01.webp", alt: "Facebook Marketplace review screenshot featuring Hilary, Jordan, and Teresa" },
-  { image: "/reviews/facebook-marketplace-02.webp", alt: "Facebook Marketplace review screenshot featuring Emily, Kristopher, and Albert" },
-  { image: "/reviews/facebook-marketplace-03.webp", alt: "Facebook Marketplace review screenshot featuring Bing, Andrew, and Nima" },
-  { image: "/reviews/facebook-marketplace-04.webp", alt: "Facebook Marketplace review screenshot featuring Ilse, JoJo, and Emani" },
-  { image: "/reviews/facebook-marketplace-05.webp", alt: "Facebook Marketplace review screenshot featuring Victor, Imu, and Youssef" },
-  { image: "/reviews/facebook-marketplace-06.webp", alt: "Facebook Marketplace review screenshot featuring Kian, Will, and Joyce" },
-  { image: "/reviews/facebook-marketplace-07.webp", alt: "Facebook Marketplace review screenshot featuring Nautica, Essie, and John" },
-  { image: "/reviews/facebook-marketplace-08.webp", alt: "Facebook Marketplace review screenshot featuring Yesenia, Carmen, and Shaun" },
-  { image: "/reviews/facebook-marketplace-09.webp", alt: "Facebook Marketplace review screenshot featuring Cory, Brenda, and Sergio" },
-] as const;
+type Review = {
+  author: string;
+  excerpt: string;
+  image: string;
+  height: number;
+  width: number;
+};
 
-const readableReviews = [
-  ["Excellent service — professional, courteous and a job well done!", "Jordan"],
-  ["Fast and very nice service! Thank you so much!", "JoJo"],
-  ["Very fast n clean work for the price. Did both my living room n bedroom tv wall mount. Highly recommend.", "Victor"],
-  ["He was amazing and super fast!! A total professional!", "Ilse"],
-  ["Syrgak did an incredible and fast job, great communication!", "Carmen"],
-  ["Well done! Took tops 15 minutes! Super friendly and efficient!", "Shaun"],
-] as const;
+// Each excerpt below was manually checked against its matching supplied
+// Marketplace crop. No review copy, name, rating, location, or date is added.
+const reviews: readonly Review[] = [
+  { author: "Jordan", excerpt: "Excellent service - professional, courteous and a job well done", image: "/reviews/cropped/02-jordan.webp", width: 850, height: 400 },
+  { author: "JoJo", excerpt: "Fast and very nice service! Thank you so much!", image: "/reviews/cropped/05-jojo.webp", width: 850, height: 386 },
+  { author: "Victor", excerpt: "Very fast n clean work for the price. Did both my living room n bedroom tv wall mount. Highly recommend.", image: "/reviews/cropped/04-victor.webp", width: 800, height: 457 },
+  { author: "Ilse", excerpt: "He was amazing and super fast!! A total professional!", image: "/reviews/cropped/04-ilse.webp", width: 800, height: 394 },
+  { author: "Carmen", excerpt: "Syrgak did an incredible and fast job, great communication!", image: "/reviews/cropped/08-carmen.webp", width: 830, height: 426 },
+  { author: "Shaun", excerpt: "Well done! Took tops 15 minutes! Super friendly and efficient!", image: "/reviews/cropped/09-shaun.webp", width: 830, height: 379 },
+];
 
 export function ReviewsSection() {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const activeReview = activeIndex === null ? null : reviewScreenshots[activeIndex];
+  const [openReview, setOpenReview] = useState<Review | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
 
-  return <section className="review-section" id="reviews" aria-labelledby="reviews-heading"><div className="container">
-    <div className="review-intro"><div><p className="eyebrow eyebrow-dark">CUSTOMER FEEDBACK</p><h2 id="reviews-heading">Feedback from real <em>customers.</em></h2></div><p>Readable excerpts below are transcribed from the original Facebook Marketplace review screenshots. Open any screenshot to view the original.</p></div>
-    <div className="review-quotes">{readableReviews.map(([quote, author]) => <figure key={author}><blockquote>“{quote}”</blockquote><figcaption>— {author}, Facebook Marketplace</figcaption></figure>)}</div>
-    <div className="review-proof" aria-label="Original customer review screenshots">{reviewScreenshots.map((review, index) => <button type="button" key={review.image} className="review-screenshot" onClick={() => setActiveIndex(index)} aria-label={`Open original review screenshot ${index + 1}`}><Image src={review.image} alt={review.alt} width={855} height={1280} sizes="(max-width: 719px) 46vw, (max-width: 1050px) 30vw, 220px" loading="lazy" quality={76} /></button>)}</div>
-    {activeReview && <div className="gallery-lightbox" role="dialog" aria-modal="true" aria-label="Original customer review screenshot" onMouseDown={() => setActiveIndex(null)}><div className="lightbox-content review-lightbox-content" onMouseDown={(event) => event.stopPropagation()}><button type="button" className="lightbox-close" onClick={() => setActiveIndex(null)} aria-label="Close review image">×</button><Image src={activeReview.image} alt={activeReview.alt} width={855} height={1280} sizes="92vw" priority quality={84} /><div><small>ORIGINAL REVIEW SCREENSHOT</small></div></div></div>}
-  </div></section>;
+  useEffect(() => {
+    if (!openReview) triggerRef.current?.focus();
+  }, [openReview]);
+
+  return (
+    <section className="review-section section" id="reviews" aria-labelledby="reviews-heading">
+      <div className="container">
+        <div className="section-heading section-heading-compact">
+          <div>
+            <p className="eyebrow">CUSTOMER REVIEWS</p>
+            <h2 id="reviews-heading">What customers say.</h2>
+          </div>
+          <p>Each excerpt is paired with its original Facebook Marketplace review.</p>
+        </div>
+        <InlineCarousel
+          ariaLabel="Customer review excerpts"
+          className="reviews-carousel"
+          nextLabel="Show next customer review"
+          previousLabel="Show previous customer review"
+          slideClassName="review-carousel-slide"
+        >
+          {reviews.map((review) => (
+            <figure className="review-card" key={review.author}>
+              <blockquote>“{review.excerpt}”</blockquote>
+              <figcaption>
+                <strong>{review.author}</strong>
+                <span>Facebook Marketplace</span>
+              </figcaption>
+              <button
+                className="review-original-button"
+                onClick={(event) => {
+                  triggerRef.current = event.currentTarget;
+                  setOpenReview(review);
+                }}
+                type="button"
+              >
+                View original <span className="sr-only">review from {review.author}</span><span aria-hidden="true">→</span>
+              </button>
+            </figure>
+          ))}
+        </InlineCarousel>
+      </div>
+      {openReview ? (
+        <div
+          className="gallery-lightbox review-lightbox"
+          role="dialog"
+          aria-label={`Original Facebook Marketplace review from ${openReview.author}`}
+          aria-modal="true"
+          onMouseDown={() => setOpenReview(null)}
+        >
+          <div className="lightbox-content review-lightbox-content" onMouseDown={(event) => event.stopPropagation()}>
+            <button className="lightbox-close" type="button" onClick={() => setOpenReview(null)} aria-label="Close original review">
+              <span aria-hidden="true">×</span>
+            </button>
+            <Image
+              alt={`Original Facebook Marketplace review from ${openReview.author}`}
+              height={openReview.height}
+              priority
+              sizes="(max-width: 719px) 92vw, 720px"
+              src={openReview.image}
+              width={openReview.width}
+            />
+          </div>
+        </div>
+      ) : null}
+    </section>
+  );
 }
