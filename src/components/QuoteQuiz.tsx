@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { estimatePresentation, type EstimateResult } from "@/lib/pricing";
 
 type Answers = Record<string, string | string[]>;
 const steps = [
@@ -31,7 +32,12 @@ const options: Record<string, Array<[string, string]>> = {
     ["plaster", "Plaster"],
     ["brick", "Brick"],
     ["concrete", "Concrete"],
-    ["tile-stone", "Tile, stone, marble, or specialty wall"],
+    ["tile", "Tile"],
+    ["stone", "Stone"],
+    ["marble", "Marble"],
+    ["decorative-panels", "Decorative panels"],
+    ["specialty", "Specialty wall"],
+    ["unknown", "I am not sure"],
   ],
   mountType: [
     ["fixed", "Fixed"],
@@ -63,8 +69,8 @@ const sizes: Array<[string, string]> = [
   ["55-64", "55–64 inches"],
   ["65-74", "65–74 inches"],
   ["75-84", "75–84 inches"],
-  ["85+", "85 inches or larger"],
-  ["98-100", "98–100 inches"],
+  ["85-97", "85 inches or larger"],
+  ["98+", "98 inches or larger"],
   ["Samsung Frame", "Samsung Frame TV"],
 ];
 function track(event: string, params: Record<string, string | number> = {}) {
@@ -75,12 +81,7 @@ function track(event: string, params: Record<string, string | number> = {}) {
 export function QuoteQuiz() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
-  const [estimate, setEstimate] = useState<{
-    low: number | null;
-    high: number | null;
-    needsReview: boolean;
-    notes: string[];
-  } | null>(null);
+  const [estimate, setEstimate] = useState<EstimateResult | null>(null);
   const [status, setStatus] = useState<
     "idle" | "sending" | "success" | "error"
   >("idle");
@@ -137,9 +138,7 @@ export function QuoteQuiz() {
       });
       const result = await response.json();
       setEstimate(result);
-      track("estimate_viewed", {
-        estimate_type: result.needsReview ? "photo_review" : "range",
-      });
+      track("estimate_viewed", { estimate_type: result.pricingDisplay });
     }
     setStep((value) => value + 1);
   };
@@ -315,7 +314,17 @@ export function QuoteQuiz() {
         </div>
       )}
       {step === 10 && estimate && (
-        <div><h3>Review your installation</h3><div className="estimate-box"><p>{tvCount} TV{tvCount > 1 ? "s" : ""}: {(answers.tvSizes as string[]).join(", ")}</p><p>Wall: {answers.wallType}; mount: {answers.mountType}; mount available: {answers.hasMount}</p><p>Wires: {answers.wireConcealment}; fireplace: {answers.aboveFireplace}; soundbar: {answers.soundbar}</p><p>Preferred date: {answers.preferredDate} {answers.preferredTime}</p><strong>{estimate.needsReview ? "This installation needs photo review before we can provide a reliable estimate." : estimate.low === estimate.high ? `Starting estimate: $${estimate.low}` : `$${estimate.low}–$${estimate.high} preliminary estimate`}</strong><p>Final pricing is confirmed after reviewing the wall, TV, mount, access, and requested services.</p>{estimate.notes.map((note) => <p key={note}>{note}</p>)}</div><p className="quiz-note">Use Back to edit any answer before continuing.</p></div>
+        <div>
+          <h3>Review your installation</h3>
+          <div className="estimate-box">
+            <p>{tvCount} TV{tvCount > 1 ? "s" : ""}: {(answers.tvSizes as string[]).join(", ")}</p>
+            <p>Wall: {answers.wallType}; mount: {answers.mountType}; mount available: {answers.hasMount}</p>
+            <p>Wires: {answers.wireConcealment}; fireplace: {answers.aboveFireplace}; soundbar: {answers.soundbar}</p>
+            <p>Preferred date: {answers.preferredDate} {answers.preferredTime}</p>
+            <EstimateDetails estimate={estimate} />
+          </div>
+          <p className="quiz-note">Use Back to edit any answer before continuing.</p>
+        </div>
       )}
       {step === 11 && (
         <div>
@@ -343,10 +352,7 @@ export function QuoteQuiz() {
       {step === 12 && (
         <div>
           <h3>Add project photos (optional)</h3>
-          <p className="quiz-note">
-            Photos help confirm wall conditions and fireplace or specialty-wall
-            requirements. JPG, PNG, or WebP; up to 5 files, 1 MB each.
-          </p>
+          <p className="quiz-note">JPG, PNG, or WebP; up to 5 files, 1 MB each.</p>
           <input
             type="file"
             accept="image/jpeg,image/png,image/webp"
@@ -361,13 +367,7 @@ export function QuoteQuiz() {
             }
           />
           {estimate && (
-            <div className="estimate-box">
-              <strong>{estimate.needsReview ? "This installation needs photo review before we can provide a reliable estimate." : estimate.low === estimate.high ? `Starting estimate: $${estimate.low}` : `$${estimate.low}–$${estimate.high} preliminary estimate`}</strong>
-              <p>Final pricing is confirmed after reviewing the wall, TV, mount, access, and requested services.</p>
-              {estimate.notes.map((note) => (
-                  <p key={note}>{note}</p>
-                ))}
-            </div>
+            <div className="estimate-box"><EstimateDetails estimate={estimate} /></div>
           )}
         </div>
       )}
@@ -407,6 +407,38 @@ export function QuoteQuiz() {
         </p>
       )}
     </div>
+  );
+}
+function EstimateDetails({ estimate }: { estimate: EstimateResult }) {
+  const presentation = estimatePresentation(estimate);
+  return (
+    <>
+      {presentation.label && <p>{presentation.label}</p>}
+      <strong>{presentation.amount}</strong>
+      {estimate.pricingDisplay !== "custom_quote" && (
+        <p>Final pricing is confirmed after reviewing the wall, TV, mount, access, and requested services.</p>
+      )}
+      <p>{estimate.summary}</p>
+      {estimate.customReasons.length > 0 && (
+        <>
+          <p><strong>Why photo review is needed</strong></p>
+          <ul>{estimate.customReasons.map((reason) => <li key={reason}>{reason}</li>)}</ul>
+        </>
+      )}
+      {estimate.requiredPhotos.length > 0 && (
+        <>
+          <p><strong>Photos to upload</strong></p>
+          <ul>{estimate.requiredPhotos.map((photo) => <li key={photo}>{photo}</li>)}</ul>
+        </>
+      )}
+      {estimate.notes.map((note) => <p key={note}>{note}</p>)}
+      {estimate.nextQuestions.length > 0 && (
+        <>
+          <p><strong>Helpful follow-up</strong></p>
+          <ul>{estimate.nextQuestions.map((question) => <li key={question}>{question}</li>)}</ul>
+        </>
+      )}
+    </>
   );
 }
 function Question({
