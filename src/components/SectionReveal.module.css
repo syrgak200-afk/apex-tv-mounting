@@ -1,0 +1,29 @@
+.reveal {
+  transition:
+    opacity 500ms ease,
+    transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--section-reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+/*
+ * Content is intentionally visible until the client has confirmed that motion
+ * is available. This leaves the section usable when JavaScript is unavailable.
+ */
+.reveal[data-reveal-ready="true"][data-reveal-visible="false"] {
+  opacity: 0;
+  transform: translateY(var(--section-reveal-distance, 22px));
+}
+
+.reveal[data-reveal-ready="true"][data-reveal-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

@@ -4,6 +4,9 @@ import { FormEvent, useState } from "react";
 import { ProjectGallery } from "@/components/ProjectGallery";
 import { QuoteQuiz } from "@/components/QuoteQuiz";
 import { ReviewsSection } from "@/components/ReviewsSection";
+import { HeroCarousel } from "@/components/HeroCarousel";
+import { FeaturedWorkCarousel } from "@/components/FeaturedWorkCarousel";
+import { SectionReveal } from "@/components/SectionReveal";
 
 const phoneDisplay = "(714) 766-1943";
 const phoneHref = "tel:+17147661943";
@@ -163,7 +166,6 @@ export default function Home() {
             className="brand"
             href="#top"
             onClick={closeMenu}
-            aria-label="Apex TV Mounting home"
           >
             <span>APEX</span>
             <small>TV MOUNTING</small>
@@ -212,7 +214,8 @@ export default function Home() {
             </a>
           </div>
         )}
-        <div className="hero-content container">
+        <div className="hero-editorial container">
+        <div className="hero-content">
           <p className="eyebrow">LOS ANGELES &amp; ORANGE COUNTY</p>
           <h1>
             Precision you can see.
@@ -240,10 +243,7 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <div className="hero-orbit" aria-hidden="true">
-          <div className="orbit-tv">
-            <div className="orbit-screen">APEX</div>
-          </div>
+        <div className="hero-media"><HeroCarousel /></div>
         </div>
       </section>
       <section className="trust-bar">
@@ -255,7 +255,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section container" id="services">
+      <SectionReveal as="section" className="section container" id="services">
         <div className="section-heading">
           <div>
             <p className="eyebrow eyebrow-dark">WHAT WE DO</p>
@@ -280,7 +280,7 @@ export default function Home() {
             </article>
           ))}
         </div>
-      </section>
+      </SectionReveal>
 
       <section className="dark-section">
         <div className="container split-feature">
@@ -353,7 +353,8 @@ export default function Home() {
         </div>
       </section>
 
-      <ProjectGallery />
+      <FeaturedWorkCarousel />
+      <div id="full-portfolio"><ProjectGallery /></div>
 
       <ReviewsSection />
 
