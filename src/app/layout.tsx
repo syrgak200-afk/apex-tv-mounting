@@ -9,7 +9,7 @@ import {
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://apex-tv-mounting.vercel.app"),
+  metadataBase: new URL("https://www.apex-tv-mounting.com"),
   title: "Apex TV Mounting & Installation | Los Angeles & Orange County",
   description: "Premium TV mounting, wire concealment, and home theater installation in Los Angeles and Orange County.",
   keywords: ["TV mounting Los Angeles", "TV installation Orange County", "wire concealment", "home theater installation"],

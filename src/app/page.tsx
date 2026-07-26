@@ -26,7 +26,7 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [formError, setFormError] = useState("");
-  const localBusinessSchema = { "@context": "https://schema.org", "@type": "LocalBusiness", name: "Apex TV Mounting & Installation", url: "https://apex-tv-mounting.vercel.app", telephone: "+1-714-766-1943", email, areaServed: ["Los Angeles", "Orange County"], serviceType: ["TV Mounting", "Wire Concealment", "Home Theater Installation"] };
+  const localBusinessSchema = { "@context": "https://schema.org", "@type": "LocalBusiness", name: "Apex TV Mounting & Installation", url: "https://www.apex-tv-mounting.com", telephone: "+1-714-766-1943", email, areaServed: ["Los Angeles", "Orange County"], serviceType: ["TV Mounting", "Wire Concealment", "Home Theater Installation"] };
   const closeMenu = () => setMenuOpen(false);
   const submitQuote = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
