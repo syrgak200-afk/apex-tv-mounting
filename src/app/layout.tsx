@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import GoogleAnalytics, { GoogleAnalyticsPageView } from "@/components/GoogleAnalytics";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -28,7 +30,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <GoogleAnalytics />
+        <Suspense fallback={null}>
+          <GoogleAnalyticsPageView />
+        </Suspense>
+      </body>
     </html>
   );
 }
