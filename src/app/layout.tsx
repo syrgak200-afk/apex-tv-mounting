@@ -20,6 +20,9 @@ export const metadata: Metadata = {
     title: "Apex TV Mounting & Installation | Precision You Can See.",
     description: "Premium TV mounting, wire concealment, and home theater installation in Los Angeles and Orange County.",
   },
+  verification: {
+    google: "gcFnoDOx5aXBMjgZTwE8TpVS1tjoSfX5zBjlFzkfAVA",
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
