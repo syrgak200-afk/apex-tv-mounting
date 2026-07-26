@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Suspense } from "react";
-import {
-  GA_MEASUREMENT_ID,
-  GA_READY_EVENT,
-  GoogleAnalyticsPageView,
-} from "@/components/GoogleAnalytics";
+import { GoogleAnalyticsPageView } from "@/components/GoogleAnalytics";
+import { GA_MEASUREMENT_ID, GA_READY_EVENT } from "@/lib/analytics";
 import "./globals.css";
 
 export const metadata: Metadata = {

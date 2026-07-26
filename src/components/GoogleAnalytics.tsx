@@ -2,9 +2,7 @@
 
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
-
-export const GA_MEASUREMENT_ID = "G-KRW9EM9BT0";
-export const GA_READY_EVENT = "apex:ga4-ready";
+import { GA_READY_EVENT } from "@/lib/analytics";
 
 declare global {
   interface Window {
